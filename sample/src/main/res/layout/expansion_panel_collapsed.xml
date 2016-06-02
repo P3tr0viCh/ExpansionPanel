@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:paddingEnd="@dimen/expansion_panel_padding_end"
+              android:paddingStart="@dimen/expansion_panel_padding_start">
+
+    <TextView
+        android:id="@+id/text_collapsed"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/expansion_panel_title_margin_end"
+        android:ellipsize="end"
+        android:freezesText="true"
+        android:maxLines="1"
+        android:text="Collapsed"
+        tools:ignore="HardcodedText"/>
+</LinearLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="expansion_panel_collapsed_min_height">48dp</dimen>
+    <dimen name="expansion_panel_expanded_min_height">64dp</dimen>
+
+    <dimen name="expansion_panel_padding_start">24dp</dimen>
+    <dimen name="expansion_panel_padding_end">24dp</dimen>
+    <dimen name="expansion_panel_title_margin_end">30dp</dimen>
+
+    <dimen name="expansion_panel_collapsed_padding_top">12dp</dimen>
+    <dimen name="expansion_panel_collapsed_padding_bottom">12dp</dimen>
+    <dimen name="expansion_panel_expanded_padding_top">20dp</dimen>
+    <dimen name="expansion_panel_expanded_padding_bottom">16dp</dimen>
+</resources>

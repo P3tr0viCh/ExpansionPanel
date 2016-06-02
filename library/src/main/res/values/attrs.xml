@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ExpansionPanel">
+        <attr name="collapsedLayout" format="reference"/>
+        <attr name="expandedLayout" format="reference"/>
+        <attr name="defaultExpanded" format="boolean"/>
+        <attr name="toggleOnCollapsedClickEnabled" format="boolean"/>
+        <attr name="toggleOnExpandedClickEnabled" format="boolean"/>
+        <attr name="durationToggle" format="integer"/>
+        <attr name="delayCollapsedViewHiding" format="integer"/>
+        <attr name="durationCollapsedViewChangeVisibility" format="integer"/>
+        <attr name="durationContentHeightChanged" format="integer"/>
+    </declare-styleable>
+</resources>
