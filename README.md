@@ -4,10 +4,10 @@
 # ExpansionPanel
 Animated expansion panel.
 
-![Demo](preview/preview 01.gif)
-![Demo](preview/preview 02.gif)
-![Demo](preview/preview 03.gif)
-![Demo](preview/preview 04.gif)
+![Demo](preview/preview_01.gif)
+![Demo](preview/preview_02.gif)
+![Demo](preview/preview_03.gif)
+![Demo](preview/preview_04.gif)
 
 Usage
 -----
