@@ -21,6 +21,6 @@ repositories {
 }
 
 dependencies {
-	    compile 'com.github.P3tr0viCh:ExpansionPanel:1.0.0'
+	    compile 'com.github.P3tr0viCh:ExpansionPanel:2.0.0'
 }
 ```
