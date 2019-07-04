@@ -4,4 +4,5 @@
     <integer name="expansion_panel_animation_delay_collapsed_view_hiding">100</integer>
     <integer name="expansion_panel_animation_duration_collapsed_view_change_visibility">130</integer>
     <integer name="expansion_panel_animation_duration_content_height_changed">255</integer>
+    <integer name="expansion_panel_animation_delay_toggle">200</integer>
 </resources>

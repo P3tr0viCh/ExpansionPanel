@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,21 +11,103 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/app_bar"
+        <LinearLayout
+            android:id="@+id/button_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/switch_slow_mo"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp">
 
+            <Button
+                android:id="@+id/btn_collapse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="Collapse"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/btn_expand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="0.3"
+                android:text="Expand"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/btn_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="Toggle"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider_02"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_above="@+id/expansion_panel"
+            android:background="?android:attr/listDivider"></View>
+
+        <View
+            android:id="@+id/divider_03"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/expansion_panel"
+            android:background="?android:attr/listDivider"></View>
+
+        <View
+            android:id="@+id/divider_01"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/expansion_panel_dialog"
+            android:background="?android:attr/listDivider"></View>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_slow_mo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:padding="16dp"
+            android:text="Slow motion"
+            tools:ignore="HardcodedText" />
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay">
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay"/>
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/expansion_panel"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="false"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_refresh_black_24dp"
+            android:tint="#FFF"
+            app:elevation="7dp"
+            app:tint="#FFF" />
 
         <ru.p3tr0vich.widget.ExpansionPanel
             android:id="@+id/expansion_panel_dialog"
@@ -36,24 +117,7 @@
             app:collapsedLayout="@layout/expansion_panel_dialog_collapsed"
             app:durationContentHeightChanged="0"
             app:expandedLayout="@layout/expansion_panel_dialog_expanded"
-            app:toggleOnExpandedClickEnabled="false">
-        </ru.p3tr0vich.widget.ExpansionPanel>
-
-        <View
-            android:id="@+id/divider_01"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/expansion_panel_dialog"
-            android:background="?android:attr/listDivider">
-        </View>
-
-        <View
-            android:id="@+id/divider_02"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_above="@+id/expansion_panel"
-            android:background="?android:attr/listDivider">
-        </View>
+            app:toggleOnExpandedClickEnabled="false" />
 
         <ru.p3tr0vich.widget.ExpansionPanel
             android:id="@+id/expansion_panel"
@@ -61,73 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/button_bar"
             app:collapsedLayout="@layout/expansion_panel_collapsed"
-            app:expandedLayout="@layout/expansion_panel_expanded">
-        </ru.p3tr0vich.widget.ExpansionPanel>
-
-        <View
-            android:id="@+id/divider_03"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/expansion_panel"
-            android:background="?android:attr/listDivider">
-        </View>
-
-        <LinearLayout
-            android:id="@+id/button_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/switch_slow_mo"
-            android:orientation="horizontal"
-            android:paddingEnd="16dp"
-            android:paddingStart="16dp"
-            android:paddingTop="16dp">
-
-            <Button
-                android:id="@+id/btn_collapse"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:text="Collapse"
-                tools:ignore="HardcodedText"/>
-
-            <Button
-                android:id="@+id/btn_expand"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_weight="0.3"
-                android:text="Expand"
-                tools:ignore="HardcodedText"/>
-
-            <Button
-                android:id="@+id/btn_toggle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:text="Toggle"
-                tools:ignore="HardcodedText"/>
-        </LinearLayout>
-
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/switch_slow_mo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:text="Slow motion"
-            tools:ignore="HardcodedText"
-            android:padding="16dp"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/expansion_panel"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_refresh_black_24dp"
-            android:tint="#FFF"
-            app:elevation="7dp"/>
+            app:expandedLayout="@layout/expansion_panel_expanded" />
 
     </RelativeLayout>
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

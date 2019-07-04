@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:paddingEnd="@dimen/expansion_panel_padding_end"
-              android:paddingStart="@dimen/expansion_panel_padding_start">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/expansion_panel_padding_start"
+    android:paddingEnd="@dimen/expansion_panel_padding_end">
 
     <TextView
         android:id="@+id/text_collapsed"
@@ -17,5 +17,5 @@
         android:freezesText="true"
         android:maxLines="1"
         android:text="Collapsed"
-        tools:ignore="HardcodedText"/>
+        tools:ignore="HardcodedText" />
 </LinearLayout>

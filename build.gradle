@@ -1,19 +1,33 @@
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.10'
-}
-
 buildscript {
+    ext {
+        compileSdkVer = 28
+        buildToolsVer = '28.0.3'
+        minSdkVer = 17
+        targetSdkVer = 28
+
+        gradleVer = '3.6.0-alpha04'
+
+        kotlinVer = '1.3.41'
+    }
+
     repositories {
         jcenter()
+        mavenCentral()
+        google()
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath "com.android.tools.build:gradle:${gradleVer}"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVer}"
     }
 }
 
 allprojects {
     repositories {
+        google()
         jcenter()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
     }
 }
 

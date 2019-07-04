@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:paddingEnd="@dimen/expansion_panel_padding_end"
-              android:paddingStart="@dimen/expansion_panel_padding_start">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/expansion_panel_padding_start"
+    android:paddingEnd="@dimen/expansion_panel_padding_end">
 
     <TextView
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
         android:layout_marginEnd="@dimen/expansion_panel_title_margin_end"
         android:text="Expanded layout"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        tools:ignore="HardcodedText"/>
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
         android:paddingTop="@dimen/expansion_panel_expanded_padding_top"
         android:text="Expanded"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        tools:ignore="HardcodedText"/>
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:layout_width="match_parent"
@@ -29,5 +29,5 @@
         android:paddingTop="8dp"
         android:text="Expanded"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        tools:ignore="HardcodedText"/>
+        tools:ignore="HardcodedText" />
 </LinearLayout>

@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/expansion_panel_main_layout"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:background="?attr/selectableItemBackground"
-             android:measureAllChildren="false">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/expansion_panel_main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:measureAllChildren="false">
 
     <FrameLayout
         android:id="@+id/expansion_panel_content_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="start|center_vertical"
-        android:measureAllChildren="false">
-    </FrameLayout>
+        android:measureAllChildren="false" />
 
     <ImageView
         android:id="@+id/expansion_panel_state_icon"
@@ -23,5 +22,5 @@
         android:layout_marginEnd="@dimen/expansion_panel_padding_end"
         android:src="@drawable/ic_expand_more_black_24dp"
         android:tint="@color/color_expand_icon"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription" />
 </FrameLayout>
