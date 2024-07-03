@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -20,8 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/divider_01"
         android:layout_toStartOf="@id/btn_save"
-        android:text="cancel"
-        tools:ignore="HardcodedText" />
+        android:text="@string/btn_cancel" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_save"
@@ -30,9 +28,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/divider_01"
         android:layout_alignParentEnd="true"
-        android:text="save"
-        android:textColor="@color/colorAccent"
-        tools:ignore="HardcodedText" />
+        android:text="@string/btn_save"
+        android:textColor="@color/colorAccent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_input_expanded"
@@ -48,7 +45,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:ems="10"
-            android:hint="Value"
+            android:hint="@string/edit_value_expanded_hint"
             android:inputType="textMultiLine" />
     </com.google.android.material.textfield.TextInputLayout>
 

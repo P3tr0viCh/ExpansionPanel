@@ -4,8 +4,8 @@
         <attr name="collapsedLayout" format="reference"/>
         <attr name="expandedLayout" format="reference"/>
         <attr name="defaultExpanded" format="boolean"/>
-        <attr name="toggleOnCollapsedClickEnabled" format="boolean"/>
-        <attr name="toggleOnExpandedClickEnabled" format="boolean"/>
+        <attr name="toggleOnCollapsedClick" format="boolean"/>
+        <attr name="toggleOnExpandedClick" format="boolean"/>
         <attr name="durationToggle" format="integer"/>
         <attr name="delayCollapsedViewHiding" format="integer"/>
         <attr name="durationCollapsedViewChangeVisibility" format="integer"/>

@@ -26,8 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
-                android:text="Collapse"
-                tools:ignore="HardcodedText" />
+                android:text="@string/btn_collapse" />
 
             <Button
                 android:id="@+id/btn_expand"
@@ -36,16 +35,14 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_weight="0.3"
-                android:text="Expand"
-                tools:ignore="HardcodedText" />
+                android:text="@string/btn_expand" />
 
             <Button
                 android:id="@+id/btn_toggle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
-                android:text="Toggle"
-                tools:ignore="HardcodedText" />
+                android:text="@string/btn_toggle" />
         </LinearLayout>
 
         <View
@@ -53,21 +50,21 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_above="@+id/expansion_panel"
-            android:background="?android:attr/listDivider"></View>
+            android:background="?android:attr/listDivider" />
 
         <View
             android:id="@+id/divider_03"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/expansion_panel"
-            android:background="?android:attr/listDivider"></View>
+            android:background="?android:attr/listDivider" />
 
         <View
             android:id="@+id/divider_01"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/expansion_panel_dialog"
-            android:background="?android:attr/listDivider"></View>
+            android:background="?android:attr/listDivider" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_slow_mo"
@@ -75,8 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:padding="16dp"
-            android:text="Slow motion"
-            tools:ignore="HardcodedText" />
+            android:text="@string/switch_slow_motion" />
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
@@ -104,6 +100,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
+            android:contentDescription="@string/fab_description"
             android:src="@drawable/ic_refresh_black_24dp"
             android:tint="#FFF"
             app:elevation="7dp"
@@ -117,7 +114,7 @@
             app:collapsedLayout="@layout/expansion_panel_dialog_collapsed"
             app:durationContentHeightChanged="0"
             app:expandedLayout="@layout/expansion_panel_dialog_expanded"
-            app:toggleOnExpandedClickEnabled="false" />
+            app:toggleOnExpandedClick="false" />
 
         <ru.p3tr0vich.widget.ExpansionPanel
             android:id="@+id/expansion_panel"

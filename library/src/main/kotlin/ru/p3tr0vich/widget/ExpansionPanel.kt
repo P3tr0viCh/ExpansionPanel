@@ -19,113 +19,113 @@ import android.widget.ImageView
 import androidx.annotation.IntDef
 import androidx.annotation.LayoutRes
 
-class ExpansionPanel @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
+class ExpansionPanel @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr) {
 
-    private var mMainLayout: FrameLayout? = null
-    private var mContentLayout: FrameLayout? = null
-    private var mStateIcon: ImageView? = null
+    private var mainLayout: FrameLayout? = null
+    private var contentLayout: FrameLayout? = null
+    private var stateIcon: ImageView? = null
 
-    private var mCollapsedView: View? = null
-    private var mExpandedView: View? = null
+    private var collapsedView: View? = null
+    private var expandedView: View? = null
 
-    private var mCollapsedHeight: Int = 0
-    private var mExpandedHeight: Int = 0
+    private var collapsedHeight: Int = 0
+    private var expandedHeight: Int = 0
 
-    private var mCollapsedPaddingTop: Int = 0
-    private var mCollapsedPaddingBottom: Int = 0
-    private var mExpandedPaddingTop: Int = 0
-    private var mExpandedPaddingBottom: Int = 0
-
-    private var mDurationToggle: Long = 0
-    private var mDelayCollapsedViewHiding: Long = 0
-    private var mDurationCollapsedViewChangeVisibility: Long = 0
-    private var mDurationContentHeightChanged: Long = 0
+    private var collapsedPaddingTop: Int = 0
+    private var collapsedPaddingBottom: Int = 0
+    private var expandedPaddingTop: Int = 0
+    private var expandedPaddingBottom: Int = 0
 
     var isExpanded: Boolean = false
         private set
 
-    private var mToggleOnCollapsedClickEnabled: Boolean = false
-    private var mToggleOnExpandedClickEnabled: Boolean = false
+    private var animatorSet = AnimatorSet()
+    private var changeViewAnimatorSet = AnimatorSet()
 
-    private var mAnimatorSet = AnimatorSet()
-    private var mChangeViewAnimatorSet = AnimatorSet()
-
-    private var mListener: ExpansionPanelListener? = null
+    private var expansionPanelListener: ExpansionPanelListener? = null
 
     @State
     @get:State
     var state: Int = 0
         private set(@State state) {
             field = state
-            if (mListener != null)
+            if (expansionPanelListener != null)
                 when (state) {
-                    COLLAPSED -> mListener!!.onCollapsed(this)
-                    COLLAPSING -> mListener!!.onCollapsing(this)
-                    EXPANDED -> mListener!!.onExpanded(this)
-                    EXPANDING -> mListener!!.onExpanding(this)
+                    COLLAPSED -> expansionPanelListener!!.onCollapsed(this)
+                    COLLAPSING -> expansionPanelListener!!.onCollapsing(this)
+                    EXPANDED -> expansionPanelListener!!.onExpanded(this)
+                    EXPANDING -> expansionPanelListener!!.onExpanding(this)
                     UPDATING -> {
                     }
                 }
         }
 
     private var contentLayoutHeight: Int
-        get() = mContentLayout!!.layoutParams.height
+        get() = contentLayout!!.layoutParams.height
         set(height) {
-            mContentLayout!!.layoutParams.height = height
-            mContentLayout!!.requestLayout()
+            contentLayout!!.layoutParams.height = height
+            contentLayout!!.requestLayout()
         }
 
-    var isToggleOnExpandedClickEnabled: Boolean
-        get() = mToggleOnExpandedClickEnabled
-        set(toggleOnExpandedClickEnabled) {
-            mToggleOnExpandedClickEnabled = toggleOnExpandedClickEnabled
-            if (isExpanded) mMainLayout!!.isClickable = mToggleOnExpandedClickEnabled
+    var toggleOnExpandedClick: Boolean = true
+        set(value) {
+            field = value
+            setClickable()
         }
 
-    var isToggleOnCollapsedClickEnabled: Boolean
-        get() = mToggleOnCollapsedClickEnabled
-        set(toggleOnCollapsedClickEnabled) {
-            mToggleOnCollapsedClickEnabled = toggleOnCollapsedClickEnabled
-            if (!isExpanded) mMainLayout!!.isClickable = mToggleOnCollapsedClickEnabled
+    var toggleOnCollapsedClick: Boolean = true
+        set(value) {
+            field = value
+            setClickable()
         }
 
-    var durationToggle: Long
-        get() = mDurationToggle
-        set(durationToggle) {
-            mDurationToggle = if (durationToggle >= 0)
-                durationToggle
+    private fun setClickable() {
+        mainLayout?.isClickable = when {
+            isExpanded -> toggleOnExpandedClick
+            else -> toggleOnCollapsedClick
+        }
+    }
+
+    var durationToggle: Long = 0
+        set(value) {
+            field = if (value >= 0)
+                value
             else
                 resources.getInteger(R.integer.expansion_panel_animation_duration_toggle).toLong()
         }
 
-    var delayCollapsedViewHiding: Long
-        get() = mDelayCollapsedViewHiding
-        set(delayCollapsedViewHiding) {
-            mDelayCollapsedViewHiding = if (delayCollapsedViewHiding >= 0)
-                delayCollapsedViewHiding
+    var delayCollapsedViewHiding: Long = 0
+        set(value) {
+            field = if (value >= 0)
+                value
             else
-                resources.getInteger(R.integer.expansion_panel_animation_delay_collapsed_view_hiding).toLong()
+                resources.getInteger(R.integer.expansion_panel_animation_delay_collapsed_view_hiding)
+                    .toLong()
         }
 
-    var durationCollapsedViewChangeVisibility: Long
-        get() = mDurationCollapsedViewChangeVisibility
-        set(durationCollapsedViewChangeVisibility) {
-            mDurationCollapsedViewChangeVisibility = if (durationCollapsedViewChangeVisibility >= 0)
-                durationCollapsedViewChangeVisibility
+    var durationCollapsedViewChangeVisibility: Long = 0
+        set(value) {
+            field = if (value >= 0)
+                value
             else
-                resources.getInteger(R.integer.expansion_panel_animation_duration_collapsed_view_change_visibility).toLong()
+                resources.getInteger(R.integer.expansion_panel_animation_duration_collapsed_view_change_visibility)
+                    .toLong()
         }
 
-    var durationContentHeightChanged: Long
-        get() = mDurationContentHeightChanged
-        set(durationContentHeightChanged) {
-            mDurationContentHeightChanged = if (durationContentHeightChanged >= 0)
-                durationContentHeightChanged
+    var durationContentHeightChanged: Long = 0
+        set(value) {
+            field = if (value >= 0)
+                value
             else
-                resources.getInteger(R.integer.expansion_panel_animation_duration_content_height_changed).toLong()
+                resources.getInteger(R.integer.expansion_panel_animation_duration_content_height_changed)
+                    .toLong()
         }
 
-    @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
+    @Retention(AnnotationRetention.SOURCE)
     @IntDef(COLLAPSED, EXPANDED, COLLAPSING, EXPANDING, UPDATING)
     annotation class State
 
@@ -142,35 +142,56 @@ class ExpansionPanel @JvmOverloads constructor(context: Context, attrs: Attribut
         try {
             isExpanded = a.getBoolean(R.styleable.ExpansionPanel_defaultExpanded, false)
 
-            collapsedLayoutId = a.getResourceId(R.styleable.ExpansionPanel_collapsedLayout, collapsedLayoutId)
-            expandedLayoutId = a.getResourceId(R.styleable.ExpansionPanel_expandedLayout, expandedLayoutId)
+            collapsedLayoutId =
+                a.getResourceId(R.styleable.ExpansionPanel_collapsedLayout, collapsedLayoutId)
+            expandedLayoutId =
+                a.getResourceId(R.styleable.ExpansionPanel_expandedLayout, expandedLayoutId)
 
-            mToggleOnCollapsedClickEnabled = a.getBoolean(R.styleable.ExpansionPanel_toggleOnCollapsedClickEnabled, true)
-            mToggleOnExpandedClickEnabled = a.getBoolean(R.styleable.ExpansionPanel_toggleOnExpandedClickEnabled, true)
+            toggleOnCollapsedClick =
+                a.getBoolean(R.styleable.ExpansionPanel_toggleOnCollapsedClick, true)
+            toggleOnExpandedClick =
+                a.getBoolean(R.styleable.ExpansionPanel_toggleOnExpandedClick, true)
 
-            mDurationToggle = a.getInteger(R.styleable.ExpansionPanel_durationToggle, resources.getInteger(R.integer.expansion_panel_animation_duration_toggle)).toLong()
-            mDelayCollapsedViewHiding = a.getInteger(R.styleable.ExpansionPanel_delayCollapsedViewHiding, resources.getInteger(R.integer.expansion_panel_animation_delay_collapsed_view_hiding)).toLong()
-            mDurationCollapsedViewChangeVisibility = a.getInteger(R.styleable.ExpansionPanel_durationCollapsedViewChangeVisibility, resources.getInteger(R.integer.expansion_panel_animation_duration_collapsed_view_change_visibility)).toLong()
-            mDurationContentHeightChanged = a.getInteger(R.styleable.ExpansionPanel_durationContentHeightChanged, resources.getInteger(R.integer.expansion_panel_animation_duration_content_height_changed)).toLong()
+            durationToggle = a.getInteger(
+                R.styleable.ExpansionPanel_durationToggle,
+                resources.getInteger(R.integer.expansion_panel_animation_duration_toggle)
+            ).toLong()
+            delayCollapsedViewHiding = a.getInteger(
+                R.styleable.ExpansionPanel_delayCollapsedViewHiding,
+                resources.getInteger(R.integer.expansion_panel_animation_delay_collapsed_view_hiding)
+            ).toLong()
+            durationCollapsedViewChangeVisibility = a.getInteger(
+                R.styleable.ExpansionPanel_durationCollapsedViewChangeVisibility,
+                resources.getInteger(R.integer.expansion_panel_animation_duration_collapsed_view_change_visibility)
+            ).toLong()
+            durationContentHeightChanged = a.getInteger(
+                R.styleable.ExpansionPanel_durationContentHeightChanged,
+                resources.getInteger(R.integer.expansion_panel_animation_duration_content_height_changed)
+            ).toLong()
         } finally {
             a.recycle()
         }
 
-        mCollapsedPaddingTop = resources.getDimensionPixelSize(R.dimen.expansion_panel_collapsed_padding_top)
-        mCollapsedPaddingBottom = resources.getDimensionPixelSize(R.dimen.expansion_panel_collapsed_padding_bottom)
-        mExpandedPaddingTop = resources.getDimensionPixelSize(R.dimen.expansion_panel_expanded_padding_top)
-        mExpandedPaddingBottom = resources.getDimensionPixelSize(R.dimen.expansion_panel_expanded_padding_bottom)
+        collapsedPaddingTop =
+            resources.getDimensionPixelSize(R.dimen.expansion_panel_collapsed_padding_top)
+        collapsedPaddingBottom =
+            resources.getDimensionPixelSize(R.dimen.expansion_panel_collapsed_padding_bottom)
+        expandedPaddingTop =
+            resources.getDimensionPixelSize(R.dimen.expansion_panel_expanded_padding_top)
+        expandedPaddingBottom =
+            resources.getDimensionPixelSize(R.dimen.expansion_panel_expanded_padding_bottom)
 
-        val inflater = getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val inflater =
+            getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-        mMainLayout = inflater.inflate(R.layout.expansion_panel, this, false) as FrameLayout
+        mainLayout = inflater.inflate(R.layout.expansion_panel, this, false) as FrameLayout
 
-        addView(mMainLayout)
+        addView(mainLayout)
 
-        mContentLayout = mMainLayout!!.findViewById(R.id.expansion_panel_content_layout)
-        mStateIcon = mMainLayout!!.findViewById(R.id.expansion_panel_state_icon)
+        contentLayout = mainLayout!!.findViewById(R.id.expansion_panel_content_layout)
+        stateIcon = mainLayout!!.findViewById(R.id.expansion_panel_state_icon)
 
-        mMainLayout!!.setOnClickListener { toggle(true) }
+        mainLayout!!.setOnClickListener { toggle(true) }
 
         setCollapsedView(collapsedLayoutId)
         setExpandedView(expandedLayoutId)
@@ -181,10 +202,10 @@ class ExpansionPanel @JvmOverloads constructor(context: Context, attrs: Attribut
     }
 
     fun setCollapsedView(collapsedView: View) {
-        mContentLayout!!.addView(collapsedView, COLLAPSED_CHILD_INDEX)
-        mCollapsedView = collapsedView
+        contentLayout!!.addView(collapsedView, COLLAPSED_CHILD_INDEX)
+        this.collapsedView = collapsedView
 
-        mCollapsedView!!.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+        this.collapsedView!!.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
             if (state == COLLAPSED) {
                 measureCollapsedHeight()
                 this@ExpansionPanel.post { checkHeights() }
@@ -193,14 +214,16 @@ class ExpansionPanel @JvmOverloads constructor(context: Context, attrs: Attribut
     }
 
     fun setCollapsedView(@LayoutRes collapsedViewId: Int) {
-        setCollapsedView(LayoutInflater.from(context).inflate(collapsedViewId, mContentLayout, false))
+        setCollapsedView(
+            LayoutInflater.from(context).inflate(collapsedViewId, contentLayout, false)
+        )
     }
 
     fun setExpandedView(expandedView: View) {
-        mContentLayout!!.addView(expandedView, EXPANDED_CHILD_INDEX)
-        mExpandedView = expandedView
+        contentLayout!!.addView(expandedView, EXPANDED_CHILD_INDEX)
+        this.expandedView = expandedView
 
-        mExpandedView!!.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+        this.expandedView!!.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
             if (state == EXPANDED) {
                 measureExpandedHeight()
                 this@ExpansionPanel.post { checkHeights() }
@@ -209,10 +232,15 @@ class ExpansionPanel @JvmOverloads constructor(context: Context, attrs: Attribut
     }
 
     fun setExpandedView(@LayoutRes expandedViewId: Int) {
-        setExpandedView(LayoutInflater.from(context).inflate(expandedViewId, mContentLayout, false))
+        setExpandedView(LayoutInflater.from(context).inflate(expandedViewId, contentLayout, false))
     }
 
-    private fun getContentMeasuredHeight(view: View, minHeight: Int, paddingTop: Int, paddingBottom: Int): Int {
+    private fun getContentMeasuredHeight(
+        view: View,
+        minHeight: Int,
+        paddingTop: Int,
+        paddingBottom: Int
+    ): Int {
         var minHeightInt = minHeight
         view.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         var height = view.measuredHeight
@@ -225,15 +253,19 @@ class ExpansionPanel @JvmOverloads constructor(context: Context, attrs: Attribut
     }
 
     private fun measureCollapsedHeight() {
-        mCollapsedHeight = getContentMeasuredHeight(mCollapsedView!!,
-                resources.getDimensionPixelSize(R.dimen.expansion_panel_collapsed_min_height),
-                mCollapsedPaddingTop, mCollapsedPaddingBottom)
+        collapsedHeight = getContentMeasuredHeight(
+            collapsedView!!,
+            resources.getDimensionPixelSize(R.dimen.expansion_panel_collapsed_min_height),
+            collapsedPaddingTop, collapsedPaddingBottom
+        )
     }
 
     private fun measureExpandedHeight() {
-        mExpandedHeight = getContentMeasuredHeight(mExpandedView!!,
-                resources.getDimensionPixelSize(R.dimen.expansion_panel_expanded_min_height),
-                mExpandedPaddingTop, mExpandedPaddingBottom)
+        expandedHeight = getContentMeasuredHeight(
+            expandedView!!,
+            resources.getDimensionPixelSize(R.dimen.expansion_panel_expanded_min_height),
+            expandedPaddingTop, expandedPaddingBottom
+        )
     }
 
     private fun measureHeights() {
@@ -242,26 +274,29 @@ class ExpansionPanel @JvmOverloads constructor(context: Context, attrs: Attribut
     }
 
     private fun setMainLayoutPadding(top: Int, bottom: Int) {
-        val start = mMainLayout!!.paddingStart
-        val end = mMainLayout!!.paddingEnd
-        mMainLayout!!.setPaddingRelative(start, top, end, bottom)
+        val start = mainLayout!!.paddingStart
+        val end = mainLayout!!.paddingEnd
+        mainLayout!!.setPaddingRelative(start, top, end, bottom)
     }
 
     private fun checkHeights() {
         val height = contentLayoutHeight
 
         if (isExpanded) {
-            if (mExpandedHeight == height) return
+            if (expandedHeight == height) return
         } else {
-            if (mCollapsedHeight == height) return
+            if (collapsedHeight == height) return
         }
 
-        if (isShown && mDurationContentHeightChanged > 0) {
+        if (isShown && durationContentHeightChanged > 0) {
             val resizePanelValueAnimator = ValueAnimator.ofInt(
-                    height, if (isExpanded) mExpandedHeight else mCollapsedHeight)
-            resizePanelValueAnimator.duration = mDurationContentHeightChanged
+                height, if (isExpanded) expandedHeight else collapsedHeight
+            )
+            resizePanelValueAnimator.duration = durationContentHeightChanged
             resizePanelValueAnimator.interpolator = AccelerateDecelerateInterpolator()
-            resizePanelValueAnimator.addUpdateListener { animation -> contentLayoutHeight = animation.animatedValue as Int }
+            resizePanelValueAnimator.addUpdateListener { animation ->
+                contentLayoutHeight = animation.animatedValue as Int
+            }
             resizePanelValueAnimator.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationStart(animation: Animator) {
                     state = UPDATING
@@ -275,7 +310,7 @@ class ExpansionPanel @JvmOverloads constructor(context: Context, attrs: Attribut
             resizePanelValueAnimator.start()
         } else {
             state = UPDATING
-            contentLayoutHeight = if (isExpanded) mExpandedHeight else mCollapsedHeight
+            contentLayoutHeight = if (isExpanded) expandedHeight else collapsedHeight
             state = if (isExpanded) EXPANDED else COLLAPSED
         }
     }
@@ -303,103 +338,119 @@ class ExpansionPanel @JvmOverloads constructor(context: Context, attrs: Attribut
     fun setExpanded(expanded: Boolean, animate: Boolean) {
         isExpanded = expanded
 
-        isToggleOnCollapsedClickEnabled = mToggleOnCollapsedClickEnabled
-        isToggleOnExpandedClickEnabled = mToggleOnExpandedClickEnabled
+        setClickable()
 
         val hidingView: View?
         val showingView: View?
 
         if (isExpanded) {
-            hidingView = mCollapsedView
-            showingView = mExpandedView
+            hidingView = collapsedView
+            showingView = expandedView
 
             measureExpandedHeight()
 
             state = EXPANDING
         } else {
-            hidingView = mExpandedView
-            showingView = mCollapsedView
+            hidingView = expandedView
+            showingView = collapsedView
 
             measureCollapsedHeight()
 
             state = COLLAPSING
         }
 
-        if (animate && isShown && mDurationToggle > 0) {
+        if (animate && isShown && this.durationToggle > 0) {
             val resizePanelAnimator = ValueAnimator.ofInt(
-                    contentLayoutHeight,
-                    if (isExpanded) mExpandedHeight else mCollapsedHeight)
+                contentLayoutHeight,
+                if (isExpanded) expandedHeight else collapsedHeight
+            )
             resizePanelAnimator.interpolator = AccelerateDecelerateInterpolator()
-            resizePanelAnimator.addUpdateListener { animation -> contentLayoutHeight = animation.animatedValue as Int }
+            resizePanelAnimator.addUpdateListener { animation ->
+                contentLayoutHeight = animation.animatedValue as Int
+            }
 
-            val holderPaddingTop = ofInt(PROPERTY_NAME_PADDING_TOP,
-                    mMainLayout!!.paddingTop,
-                    if (isExpanded) mExpandedPaddingTop else mCollapsedPaddingTop)
-            val holderPaddingBottom = ofInt(PROPERTY_NAME_PADDING_BOTTOM,
-                    mMainLayout!!.paddingBottom,
-                    if (isExpanded) mExpandedPaddingBottom else mCollapsedPaddingBottom)
+            val holderPaddingTop = ofInt(
+                PROPERTY_NAME_PADDING_TOP,
+                mainLayout!!.paddingTop,
+                if (isExpanded) expandedPaddingTop else collapsedPaddingTop
+            )
+            val holderPaddingBottom = ofInt(
+                PROPERTY_NAME_PADDING_BOTTOM,
+                mainLayout!!.paddingBottom,
+                if (isExpanded) expandedPaddingBottom else collapsedPaddingBottom
+            )
 
             val resizePaddingAnimator = ValueAnimator.ofPropertyValuesHolder(
-                    holderPaddingTop, holderPaddingBottom)
+                holderPaddingTop, holderPaddingBottom
+            )
             resizePaddingAnimator.interpolator = LinearInterpolator()
             resizePaddingAnimator.addUpdateListener { animation ->
                 setMainLayoutPadding(
-                        animation.getAnimatedValue(PROPERTY_NAME_PADDING_TOP) as Int,
-                        animation.getAnimatedValue(PROPERTY_NAME_PADDING_BOTTOM) as Int)
+                    animation.getAnimatedValue(PROPERTY_NAME_PADDING_TOP) as Int,
+                    animation.getAnimatedValue(PROPERTY_NAME_PADDING_BOTTOM) as Int
+                )
             }
 
-            val stateIconRotation = mStateIcon!!.rotation
+            val stateIconRotation = stateIcon!!.rotation
 
-            val rotateIconAnimator = ValueAnimator.ofFloat(stateIconRotation, if (isExpanded) 180f else 0f)
+            val rotateIconAnimator =
+                ValueAnimator.ofFloat(stateIconRotation, if (isExpanded) 180f else 0f)
             rotateIconAnimator.interpolator = AccelerateDecelerateInterpolator()
-            rotateIconAnimator.addUpdateListener { animation -> mStateIcon!!.rotation = animation.animatedValue as Float }
-
-            val delayCollapsedViewHiding: Long
-            val durationCollapsedViewChangeVisibility: Long
-
-            if (mDelayCollapsedViewHiding > mDurationToggle ||
-                    mDurationCollapsedViewChangeVisibility > mDurationToggle ||
-                    mDelayCollapsedViewHiding + mDurationCollapsedViewChangeVisibility > mDurationToggle) {
-                delayCollapsedViewHiding = 0
-                durationCollapsedViewChangeVisibility = 0
-            } else {
-                delayCollapsedViewHiding = mDelayCollapsedViewHiding
-                durationCollapsedViewChangeVisibility = mDurationCollapsedViewChangeVisibility
+            rotateIconAnimator.addUpdateListener { animation ->
+                stateIcon!!.rotation = animation.animatedValue as Float
             }
 
-            val duration: Long
+            val delayCollapsedViewHidingLocal: Long
+            val durationCollapsedViewChangeVisibilityLocal: Long
+
+            if (delayCollapsedViewHiding > durationToggle ||
+                durationCollapsedViewChangeVisibility > durationToggle ||
+                delayCollapsedViewHiding + durationCollapsedViewChangeVisibility > durationToggle
+            ) {
+                delayCollapsedViewHidingLocal = 0
+                durationCollapsedViewChangeVisibilityLocal = 0
+            } else {
+                delayCollapsedViewHidingLocal = delayCollapsedViewHiding
+                durationCollapsedViewChangeVisibilityLocal = durationCollapsedViewChangeVisibility
+            }
+
             val delay: Long
+            val duration: Long
 
             val durationHide: Long
             val durationShow: Long
 
-            val durationExpandedViewChangeVisibility = mDurationToggle - delayCollapsedViewHiding - durationCollapsedViewChangeVisibility
+            val durationExpandedViewChangeVisibilityLocal =
+                durationToggle - delayCollapsedViewHidingLocal - durationCollapsedViewChangeVisibilityLocal
 
             if (isExpanded) {
                 if (stateIconRotation == 0f) {
-                    duration = mDurationToggle
+                    duration = durationToggle
 
-                    delay = delayCollapsedViewHiding
-                    durationHide = durationCollapsedViewChangeVisibility
-                    durationShow = durationExpandedViewChangeVisibility
+                    delay = delayCollapsedViewHidingLocal
+                    durationHide = durationCollapsedViewChangeVisibilityLocal
+                    durationShow = durationExpandedViewChangeVisibilityLocal
                 } else {
-                    duration = (mDurationToggle * (180f - stateIconRotation) / 180f).toLong()
+                    duration = (durationToggle * (180f - stateIconRotation) / 180f).toLong()
 
                     when {
-                        duration <= durationExpandedViewChangeVisibility -> {
+                        duration <= durationExpandedViewChangeVisibilityLocal -> {
                             delay = 0
                             durationHide = 0
                             durationShow = duration
                         }
-                        duration < durationCollapsedViewChangeVisibility + durationExpandedViewChangeVisibility -> {
+
+                        duration < durationCollapsedViewChangeVisibilityLocal + durationExpandedViewChangeVisibilityLocal -> {
                             delay = 0
-                            durationHide = duration - durationExpandedViewChangeVisibility
-                            durationShow = durationExpandedViewChangeVisibility
+                            durationHide = duration - durationExpandedViewChangeVisibilityLocal
+                            durationShow = durationExpandedViewChangeVisibilityLocal
                         }
+
                         else -> {
-                            delay = duration - (durationCollapsedViewChangeVisibility + durationExpandedViewChangeVisibility)
-                            durationHide = durationCollapsedViewChangeVisibility
-                            durationShow = durationExpandedViewChangeVisibility
+                            delay =
+                                duration - (durationCollapsedViewChangeVisibilityLocal + durationExpandedViewChangeVisibilityLocal)
+                            durationHide = durationCollapsedViewChangeVisibilityLocal
+                            durationShow = durationExpandedViewChangeVisibilityLocal
                         }
                     }
                 }
@@ -407,25 +458,28 @@ class ExpansionPanel @JvmOverloads constructor(context: Context, attrs: Attribut
                 delay = 0
 
                 if (stateIconRotation == 180f) {
-                    duration = mDurationToggle
+                    duration = durationToggle
 
-                    durationShow = durationCollapsedViewChangeVisibility
-                    durationHide = durationExpandedViewChangeVisibility
+                    durationShow = durationCollapsedViewChangeVisibilityLocal
+                    durationHide = durationExpandedViewChangeVisibilityLocal
                 } else {
-                    duration = (mDurationToggle * stateIconRotation / 180f).toLong()
+                    duration = (durationToggle * stateIconRotation / 180f).toLong()
 
                     when {
-                        duration <= delayCollapsedViewHiding -> {
+                        duration <= delayCollapsedViewHidingLocal -> {
                             durationShow = 0
                             durationHide = 0
                         }
-                        duration <= delayCollapsedViewHiding + durationCollapsedViewChangeVisibility -> {
-                            durationShow = duration - delayCollapsedViewHiding
+
+                        duration <= delayCollapsedViewHidingLocal + durationCollapsedViewChangeVisibilityLocal -> {
+                            durationShow = duration - delayCollapsedViewHidingLocal
                             durationHide = 0
                         }
+
                         else -> {
-                            durationShow = durationCollapsedViewChangeVisibility
-                            durationHide = duration - (delayCollapsedViewHiding + durationCollapsedViewChangeVisibility)
+                            durationShow = durationCollapsedViewChangeVisibilityLocal
+                            durationHide =
+                                duration - (delayCollapsedViewHidingLocal + durationCollapsedViewChangeVisibilityLocal)
                         }
                     }
                 }
@@ -433,96 +487,107 @@ class ExpansionPanel @JvmOverloads constructor(context: Context, attrs: Attribut
 
             val hideAnimator: ValueAnimator?
 
-            if (durationHide > 0) {
-                hideAnimator = ValueAnimator.ofFloat(hidingView!!.alpha, 0f)
-                hideAnimator!!.interpolator = LinearInterpolator()
+            if (durationHide > 0 && hidingView != null) {
+                hideAnimator = ValueAnimator.ofFloat(hidingView.alpha, 0f)
+                hideAnimator.interpolator = LinearInterpolator()
                 hideAnimator.duration = durationHide
-                hideAnimator.addUpdateListener { animation -> hidingView.alpha = animation.animatedValue as Float }
-            } else
+                hideAnimator.addUpdateListener { animation ->
+                    hidingView.alpha = animation.animatedValue as Float
+                }
+            } else {
                 hideAnimator = null
+            }
 
             val showAnimator: ValueAnimator?
 
-            if (durationShow > 0) {
-                showAnimator = ValueAnimator.ofFloat(showingView!!.alpha, 1f)
-                showAnimator!!.interpolator = LinearInterpolator()
+            if (durationShow > 0 && showingView != null) {
+                showAnimator = ValueAnimator.ofFloat(showingView.alpha, 1f)
+                showAnimator.interpolator = LinearInterpolator()
                 showAnimator.duration = durationShow
-                showAnimator.addUpdateListener { animation -> showingView.alpha = animation.animatedValue as Float }
-            } else
+                showAnimator.addUpdateListener { animation ->
+                    showingView.alpha = animation.animatedValue as Float
+                }
+            } else {
                 showAnimator = null
+            }
 
-            mAnimatorSet.cancel()
-            mChangeViewAnimatorSet.cancel()
+            animatorSet.cancel()
+            changeViewAnimatorSet.cancel()
 
-            mAnimatorSet = AnimatorSet()
-            mAnimatorSet.startDelay = resources.getInteger(R.integer.expansion_panel_animation_delay_toggle).toLong()
+            animatorSet = AnimatorSet()
+            animatorSet.startDelay =
+                resources.getInteger(R.integer.expansion_panel_animation_delay_toggle).toLong()
 
-            mChangeViewAnimatorSet = AnimatorSet()
+            changeViewAnimatorSet = AnimatorSet()
 
-            if (delay > 0) mChangeViewAnimatorSet.startDelay = delay
+            if (delay > 0) changeViewAnimatorSet.startDelay = delay
 
             if (hideAnimator != null && showAnimator != null) {
-                mChangeViewAnimatorSet.playSequentially(hideAnimator, showAnimator)
+                changeViewAnimatorSet.playSequentially(hideAnimator, showAnimator)
             } else {
-                if (showAnimator != null) mChangeViewAnimatorSet.play(showAnimator)
-                if (hideAnimator != null) mChangeViewAnimatorSet.play(hideAnimator)
+                if (showAnimator != null) changeViewAnimatorSet.play(showAnimator)
+                if (hideAnimator != null) changeViewAnimatorSet.play(hideAnimator)
             }
-            mChangeViewAnimatorSet.addListener(object : AnimatorListenerAdapter() {
+            changeViewAnimatorSet.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationStart(animation: Animator) {
-                    hidingView!!.visibility = if (durationHide > 0) View.VISIBLE else View.GONE
-                    showingView!!.visibility = if (durationShow > 0) View.VISIBLE else View.GONE
+                    hidingView?.visibility = if (durationHide > 0) View.VISIBLE else View.GONE
+                    showingView?.visibility = if (durationShow > 0) View.VISIBLE else View.GONE
                 }
 
                 override fun onAnimationEnd(animation: Animator) {
-                    hidingView!!.alpha = 0f
-                    showingView!!.alpha = 1f
+                    hidingView?.alpha = 0f
+                    showingView?.alpha = 1f
 
-                    hidingView.visibility = View.GONE
-                    showingView.visibility = View.VISIBLE
+                    hidingView?.visibility = View.GONE
+                    showingView?.visibility = View.VISIBLE
                 }
             })
 
-            mAnimatorSet.duration = duration
-            mAnimatorSet.playTogether(resizePanelAnimator, resizePaddingAnimator, rotateIconAnimator)
-            mAnimatorSet.addListener(object : AnimatorListenerAdapter() {
+            animatorSet.duration = duration
+            animatorSet.playTogether(
+                resizePanelAnimator,
+                resizePaddingAnimator,
+                rotateIconAnimator
+            )
+            animatorSet.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationStart(animation: Animator) {
                     (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                            .hideSoftInputFromWindow(windowToken, 0)
+                        .hideSoftInputFromWindow(windowToken, 0)
                 }
 
                 override fun onAnimationEnd(animation: Animator) {
                     val height = contentLayoutHeight
                     if (isExpanded) {
-                        if (height == mExpandedHeight) state = EXPANDED
+                        if (height == expandedHeight) state = EXPANDED
                     } else {
-                        if (height == mCollapsedHeight) state = COLLAPSED
+                        if (height == collapsedHeight) state = COLLAPSED
                     }
                 }
             })
 
-            mAnimatorSet.start()
-            mChangeViewAnimatorSet.start()
+            animatorSet.start()
+            changeViewAnimatorSet.start()
         } else {
-            hidingView!!.alpha = 0f
-            showingView!!.alpha = 1f
+            hidingView?.alpha = 0f
+            showingView?.alpha = 1f
 
-            hidingView.visibility = View.GONE
-            showingView.visibility = View.VISIBLE
+            hidingView?.visibility = View.GONE
+            showingView?.visibility = View.VISIBLE
 
             if (isExpanded) {
-                contentLayoutHeight = mExpandedHeight
+                contentLayoutHeight = expandedHeight
 
-                setMainLayoutPadding(mExpandedPaddingTop, mExpandedPaddingBottom)
+                setMainLayoutPadding(expandedPaddingTop, expandedPaddingBottom)
 
-                mStateIcon!!.rotation = 180f
+                stateIcon?.rotation = 180f
 
                 state = EXPANDED
             } else {
-                contentLayoutHeight = mCollapsedHeight
+                contentLayoutHeight = collapsedHeight
 
-                setMainLayoutPadding(mCollapsedPaddingTop, mCollapsedPaddingBottom)
+                setMainLayoutPadding(collapsedPaddingTop, collapsedPaddingBottom)
 
-                mStateIcon!!.rotation = 0f
+                stateIcon?.rotation = 0f
 
                 state = COLLAPSED
             }
@@ -530,11 +595,11 @@ class ExpansionPanel @JvmOverloads constructor(context: Context, attrs: Attribut
     }
 
     fun setListener(listener: ExpansionPanelListener?) {
-        mListener = listener
+        expansionPanelListener = listener
     }
 
     fun hasListener(): Boolean {
-        return mListener != null
+        return expansionPanelListener != null
     }
 
     internal class SavedState : BaseSavedState {
@@ -577,11 +642,11 @@ class ExpansionPanel @JvmOverloads constructor(context: Context, attrs: Attribut
         }
     }
 
-    override fun onSaveInstanceState(): Parcelable? {
+    override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState()
         val ss = SavedState(superState)
-        ss.collapsedHeight = mCollapsedHeight
-        ss.expandedHeight = mExpandedHeight
+        ss.collapsedHeight = collapsedHeight
+        ss.expandedHeight = expandedHeight
         ss.expanded = isExpanded
         return ss
     }
@@ -589,8 +654,8 @@ class ExpansionPanel @JvmOverloads constructor(context: Context, attrs: Attribut
     override fun onRestoreInstanceState(state: Parcelable) {
         val ss = state as SavedState
         super.onRestoreInstanceState(ss.superState)
-        mCollapsedHeight = ss.collapsedHeight
-        mExpandedHeight = ss.expandedHeight
+        collapsedHeight = ss.collapsedHeight
+        expandedHeight = ss.expandedHeight
         setExpanded(ss.expanded, false)
     }
 

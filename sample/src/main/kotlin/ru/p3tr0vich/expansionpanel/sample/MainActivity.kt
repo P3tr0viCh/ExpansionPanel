@@ -4,7 +4,6 @@ import android.os.Bundle
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import androidx.appcompat.widget.Toolbar
 import android.text.TextUtils
 import android.view.View
 import android.widget.EditText
@@ -17,49 +16,55 @@ import ru.p3tr0vich.widget.ExpansionPanelListenerAdapter
 
 class MainActivity : AppCompatActivity() {
 
-    private var mExpansionPanel: ExpansionPanel? = null
-    private var mExpansionPanelDialog: ExpansionPanel? = null
+    private var dialogValue: String? = null
+        set(value) {
+            field = value
 
-    private var mValue: String? = null
+            findViewById<TextView>(R.id.text_value_collapsed).text =
+                if (TextUtils.isEmpty(value)) "empty" else value
+
+            findViewById<TextView>(R.id.edit_value_expanded).text = value
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(findViewById(R.id.toolbar))
 
-        mExpansionPanel = findViewById(R.id.expansion_panel)
-        mExpansionPanelDialog = findViewById(R.id.expansion_panel_dialog)
+        val expansionPanel = findViewById<ExpansionPanel>(R.id.expansion_panel)
+        val expansionPanelDialog = findViewById<ExpansionPanel>(R.id.expansion_panel_dialog)
 
-        val fab = findViewById<FloatingActionButton>(R.id.fab)
-        fab.setOnClickListener {
+        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
             val random = Random()
 
-            (findViewById<View>(R.id.text_collapsed) as TextView).text = random.nextInt(Integer.MAX_VALUE).toString()
-            (findViewById<View>(R.id.text_expanded) as TextView).text = random.nextInt(Integer.MAX_VALUE).toString()
+            findViewById<TextView>(R.id.text_collapsed).text =
+                random.nextInt(Integer.MAX_VALUE).toString()
+            findViewById<TextView>(R.id.text_expanded).text =
+                random.nextInt(Integer.MAX_VALUE).toString()
 
             var s = random.nextInt().toString()
-            if (random.nextBoolean()) s = s + '\n' + random.nextInt()
-            if (random.nextBoolean()) s = s + '\n' + random.nextInt()
-            if (random.nextBoolean()) s = s + '\n' + random.nextInt()
+            if (random.nextBoolean()) s += '\n' + random.nextInt().toString()
+            if (random.nextBoolean()) s += '\n' + random.nextInt().toString()
+            if (random.nextBoolean()) s += '\n' + random.nextInt().toString()
 
-            (findViewById<View>(R.id.text_expanded_2) as TextView).text = s
+            findViewById<TextView>(R.id.text_expanded_2).text = s
         }
 
-        findViewById<View>(R.id.btn_collapse).setOnClickListener { mExpansionPanel!!.collapse() }
-        findViewById<View>(R.id.btn_expand).setOnClickListener { mExpansionPanel!!.expand() }
-        findViewById<View>(R.id.btn_toggle).setOnClickListener { mExpansionPanel!!.toggle() }
+        findViewById<View>(R.id.btn_collapse).setOnClickListener { expansionPanel!!.collapse() }
+        findViewById<View>(R.id.btn_expand).setOnClickListener { expansionPanel!!.expand() }
+        findViewById<View>(R.id.btn_toggle).setOnClickListener { expansionPanel!!.toggle() }
 
-        findViewById<View>(R.id.btn_cancel).setOnClickListener { mExpansionPanelDialog!!.collapse() }
-        findViewById<View>(R.id.btn_save).setOnClickListener {
-            setValue((findViewById<View>(R.id.edit_value_expanded) as EditText).text.toString())
+        expansionPanelDialog.findViewById<View>(R.id.btn_cancel)
+            .setOnClickListener { expansionPanelDialog.collapse() }
+        expansionPanelDialog.findViewById<View>(R.id.btn_save)?.setOnClickListener {
+            dialogValue = findViewById<EditText>(R.id.edit_value_expanded).text.toString()
 
-            mExpansionPanelDialog!!.collapse()
+            expansionPanelDialog.collapse()
         }
 
         findViewById<View>(R.id.switch_slow_mo).setOnClickListener { v ->
-            with(mExpansionPanel!!) {
+            with(expansionPanel) {
                 if ((v as SwitchCompat).isChecked) {
                     durationToggle *= 5
                     delayCollapsedViewHiding *= 5
@@ -74,29 +79,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val value: String? = if (savedInstanceState != null)
+        dialogValue = if (savedInstanceState != null)
             savedInstanceState.getString("value")
         else
             Random().nextInt(Integer.MAX_VALUE).toString()
 
-        setValue(value)
-
-        mExpansionPanelDialog!!.setListener(object : ExpansionPanelListenerAdapter() {
+        expansionPanelDialog.setListener(object : ExpansionPanelListenerAdapter() {
             override fun onCollapsed(panel: ExpansionPanel) {
-                setValue(mValue)
+                dialogValue = dialogValue
             }
         })
     }
 
-    private fun setValue(value: String?) {
-        mValue = value
-
-        (findViewById<View>(R.id.text_value_collapsed) as TextView).text = if (TextUtils.isEmpty(value)) "empty" else value
-        (findViewById<View>(R.id.edit_value_expanded) as EditText).setText(value)
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("value", mValue)
+        outState.putString("value", dialogValue)
     }
 }

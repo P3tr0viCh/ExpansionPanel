@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:tools="http://schemas.android.com/tools"
-          package="ru.p3tr0vich.widget">
+<manifest xmlns:tools="http://schemas.android.com/tools">
 
-    <application tools:ignore="AllowBackup,GoogleAppIndexingWarning,MissingApplicationIcon"/>
+    <application tools:ignore="AllowBackup,GoogleAppIndexingWarning,MissingApplicationIcon" />
 </manifest>

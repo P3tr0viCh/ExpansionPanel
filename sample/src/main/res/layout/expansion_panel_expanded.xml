@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/expansion_panel_title_margin_end"
         android:freezesText="true"
-        android:text="Expanded" />
+        android:text="@string/text_expanded" />
 
     <TextView
         android:id="@+id/text_expanded_2"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:freezesText="true"
         android:paddingTop="@dimen/expansion_panel_expanded_padding_top"
-        android:text="TextView" />
+        android:text="@string/text_expanded_2" />
 
     <TextView
         android:id="@+id/text_expanded_3"
@@ -31,5 +31,5 @@
         android:layout_height="wrap_content"
         android:freezesText="true"
         android:paddingTop="8dp"
-        android:text="TextView" />
+        android:text="@string/text_expanded_3" />
 </LinearLayout>

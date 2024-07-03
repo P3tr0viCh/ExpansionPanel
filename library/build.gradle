@@ -1,21 +1,21 @@
-apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
 
 group = 'com.github.p3tr0vich'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVer
-    buildToolsVersion rootProject.ext.buildToolsVer
+    namespace "ru.p3tr0vich.widget"
 
     defaultConfig {
+        compileSdk rootProject.ext.compileSdkVer
+
         minSdkVersion rootProject.ext.minSdkVer
         targetSdkVersion rootProject.ext.targetSdkVer
 
-        versionCode 2
-        versionName "2.0"
+        versionCode 3
+        versionName "2.1"
     }
 
     buildTypes {
@@ -29,12 +29,21 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_19
+        targetCompatibility JavaVersion.VERSION_19
+    }
+
+    kotlinOptions {
+        jvmTarget = '19'
+    }
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
 
-    implementation 'com.google.android.material:material:1.1.0-alpha07'
+    implementation 'com.google.android.material:material:1.12.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlinVer}"
 }

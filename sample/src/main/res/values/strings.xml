@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">ExpansionPanel</string>
     <string name="action_settings">Settings</string>
+    <string name="fab_description">Random text</string>
+    <string name="btn_expand">Expand</string>
+    <string name="btn_toggle">Toggle</string>
+    <string name="btn_collapse">Collapse</string>
+    <string name="switch_slow_motion">Slow motion</string>
+    <string name="text_collapsed">Collapsed</string>
+    <string name="text_expanded">Expanded</string>
+    <string name="text_expanded_2">TextView</string>
+    <string name="text_expanded_3">TextView</string>
+    <string name="text_value">Value</string>
+    <string name="text_value_collapsed">TextView</string>
+    <string name="btn_cancel">cancel</string>
+    <string name="btn_save">save</string>
+    <string name="edit_value_expanded_hint">Value</string>
 </resources>
