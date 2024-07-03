@@ -1,5 +1,5 @@
 [![Release](https://jitpack.io/v/P3tr0viCh/ExpansionPanel.svg)](https://jitpack.io/#P3tr0viCh/ExpansionPanel)
-[![API](https://img.shields.io/badge/API-17%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=17)
+[![API](https://img.shields.io/badge/API-21%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=21)
 
 # ExpansionPanel
 Animated expansion panel.
